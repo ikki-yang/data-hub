@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- Mapper接口的全限定名 -->
+<mapper namespace="com.issac.studio.app.entity.mapper.TaskLogMapper" >
+    <resultMap id="taskLog" type="com.issac.studio.app.entity.domain.TaskLog">
+        <result property="id" column="id" javaType="java.lang.Long"/>
+        <result property="created" column="created" javaType="java.util.Date"/>
+        <result property="modified" column="modified" javaType="java.util.Date"/>
+        <result property="yn" column="yn" javaType="java.lang.Integer"/>
+        <result property="taskKey" column="task_key" javaType="java.lang.String"/>
+        <result property="startTime" column="start_time" javaType="java.util.Date"/>
+        <result property="endTime" column="end_time" javaType="java.util.Date"/>
+        <result property="status" column="status" javaType="java.lang.Integer"/>
+        <result property="errorLog" column="error_log" javaType="java.lang.String"/>
+    </resultMap>
+    <sql id="selectClause">
+        id
+        , created
+        , modified
+        , yn
+        , task_key
+        , start_time
+        , end_time
+        , status
+        , error_log
+    </sql>
+
+    <sql id="tableClause">
+        task_log
+    </sql>
+    <sql id="whereClause">
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="created != null">
+                and created = #{created}
+            </if>
+            <if test="modified != null">
+                and modified = #{modified}
+            </if>
+            <if test="yn != null">
+                and yn = #{yn}
+            </if>
+            <if test="yn == null">
+                and yn = 1
+            </if>
+            <if test="taskKey != null and taskKey != ''">
+                and task_key = #{taskKey}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and start_time = #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and end_time = #{endTime}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </sql>
+    <sql id="setClause">
+            <if test="id != null">
+                id = #{id},
+            </if>
+            <if test="created != null">
+                created = #{created},
+            </if>
+            <if test="modified != null">
+                modified = #{modified},
+            </if>
+            <if test="yn != null">
+                yn = #{yn},
+            </if>
+            <if test="taskKey != null and taskKey != ''">
+                task_key = #{taskKey},
+            </if>
+            <if test="startTime != null and startTime != ''">
+                start_time = #{startTime},
+            </if>
+            <if test="endTime != null and endTime != ''">
+                end_time = #{endTime},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="errorLog != null and errorLog != ''">
+                error_log = #{errorLog}
+            </if>
+    </sql>
+
+    <select id="query" resultMap="taskLog">
+        select
+            <include refid="selectClause"/>
+        from
+            <include refid="tableClause"/>
+        <include refid="whereClause"/>
+    </select>
+
+    <select id="queryById" resultMap="taskLog">
+        select
+            <include refid="selectClause"/>
+        from
+            <include refid="tableClause"/>
+        where
+            id = #{id}
+    </select>
+
+    <update id="updateById">
+        update
+            <include refid="tableClause"/>
+        set <include refid="setClause"></include>
+        where
+            id = #{id}
+    </update>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        insert into <include refid="tableClause"/>
+        set <include refid="setClause"></include>
+    </insert>
+</mapper>

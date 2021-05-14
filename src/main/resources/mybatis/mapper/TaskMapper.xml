@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- Mapper接口的全限定名 -->
+<mapper namespace="com.issac.studio.app.entity.mapper.TaskMapper" >
+    <resultMap id="task" type="com.issac.studio.app.entity.domain.Task">
+        <result property="id" column="id" javaType="java.lang.Long"/>
+        <result property="created" column="created" javaType="java.util.Date"/>
+        <result property="modified" column="modified" javaType="java.util.Date"/>
+        <result property="yn" column="yn" javaType="java.lang.Integer"/>
+        <result property="taskKey" column="task_key" javaType="java.lang.String"/>
+        <result property="taskName" column="task_name" javaType="java.lang.String"/>
+        <result property="transformSql" column="transform_sql" javaType="java.lang.String"/>
+        <result property="hiveSupport" column="hive_support" javaType="java.lang.Integer"/>
+        <result property="sparkConfig" column="spark_config" javaType="java.lang.String"/>
+        <result property="latch" column="latch" javaType="java.lang.Integer"/>
+    </resultMap>
+    <sql id="selectClause">
+        id
+        , created
+        , modified
+        , yn
+        , task_key
+        , task_name
+        , transform_sql
+        , hive_support
+        , spark_config
+        , latch
+    </sql>
+
+    <sql id="tableClause">
+        task
+    </sql>
+    <sql id="whereClause">
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="created != null">
+                and created = #{created}
+            </if>
+            <if test="modified != null">
+                and modified = #{modified}
+            </if>
+            <if test="yn != null">
+                and yn = #{yn}
+            </if>
+            <if test="yn == null">
+                and yn = 1
+            </if>
+            <if test="taskKey != null and taskKey != ''">
+                and task_key = #{taskKey}
+            </if>
+            <if test="taskName != null and taskName != ''">
+                and task_name = #{taskName}
+            </if>
+            <if test="latch != null">
+                and latch = #{latch}
+            </if>
+        </where>
+    </sql>
+    <sql id="setClause">
+            <if test="id != null">
+                id = #{id},
+            </if>
+            <if test="created != null">
+                created = #{created},
+            </if>
+            <if test="modified != null">
+                modified = #{modified},
+            </if>
+            <if test="yn != null">
+                yn = #{yn},
+            </if>
+            <if test="taskKey != null and taskKey != ''">
+                task_key = #{taskKey},
+            </if>
+            <if test="taskName != null and taskName != ''">
+                task_name = #{taskName},
+            </if>
+            <if test="transformSql != null and transformSql != ''">
+                transform_sql = #{transformSql},
+            </if>
+            <if test="hiveSupport != null">
+                hive_support = #{hiveSupport},
+            </if>
+            <if test="sparkConfig != null">
+                spark_config = #{sparkConfig}
+            </if>
+    </sql>
+
+    <select id="query" resultMap="task">
+        select
+            <include refid="selectClause"/>
+        from
+            <include refid="tableClause"/>
+        <include refid="whereClause"/>
+    </select>
+
+    <select id="queryById" resultMap="task">
+        select
+            <include refid="selectClause"/>
+        from
+            <include refid="tableClause"/>
+        where
+            id = #{id}
+    </select>
+
+    <update id="updateById">
+        update
+            <include refid="tableClause"/>
+        set <include refid="setClause"></include>
+        where
+            id = #{id}
+    </update>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        insert into <include refid="tableClause"/>
+        set <include refid="setClause"></include>
+    </insert>
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- Mapper接口的全限定名 -->
+<mapper namespace="com.issac.studio.app.entity.mapper.TaskMapper" >
+    <resultMap id="handle" type="com.issac.studio.app.entity.domain.Handle">
+        <result property="id" column="id" javaType="java.lang.Long"/>
+        <result property="created" column="created" javaType="java.util.Date"/>
+        <result property="modified" column="modified" javaType="java.util.Date"/>
+        <result property="yn" column="yn" javaType="java.lang.Integer"/>
+        <result property="taskId" column="task_id" javaType="java.lang.Long"/>
+        <result property="executeType" column="execute_type" javaType="java.lang.Integer"/>
+        <result property="handleType" column="handle_type" javaType="java.lang.String"/>
+        <result property="handleConfigType" column="handle_config_type" javaType="java.lang.String"/>
+        <result property="handleConfigJson" column="handle_config_json" javaType="java.lang.String"/>
+    </resultMap>
+    <sql id="selectClause">
+        id
+        , created
+        , modified
+        , yn
+        , task_id
+        , execute_type
+        , handle_type
+        , handle_config_type
+        , handle_config_json
+    </sql>
+
+    <sql id="tableClause">
+        task
+    </sql>
+    <sql id="whereClause">
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="created != null">
+                and created = #{created}
+            </if>
+            <if test="modified != null">
+                and modified = #{modified}
+            </if>
+            <if test="yn != null">
+                and yn = #{yn}
+            </if>
+            <if test="yn == null">
+                and yn = 1
+            </if>
+            <if test="taskId != null">
+                and task_id = #{taskId}
+            </if>
+            <if test="executeType != null">
+                and execute_type = #{executeType}
+            </if>
+        </where>
+    </sql>
+    <sql id="setClause">
+            <if test="id != null">
+                id = #{id},
+            </if>
+            <if test="created != null">
+                created = #{created},
+            </if>
+            <if test="modified != null">
+                modified = #{modified},
+            </if>
+            <if test="yn != null">
+                yn = #{yn},
+            </if>
+            <if test="taskId != null">
+                task_id = #{taskId},
+            </if>
+            <if test="executeType != null">
+                execute_type = #{executeType},
+            </if>
+            <if test="handleType != null and handleType != ''">
+                handle_type = #{handleType},
+            </if>
+            <if test="handleConfigType != null and handleConfigType != ''">
+                handle_config_type = #{handleConfigType},
+            </if>
+            <if test="handleConfigJson != null and handleConfigJson != ''">
+                handle_config_json = #{handleConfigJson}
+            </if>
+    </sql>
+
+    <select id="query" resultMap="task">
+        select
+            <include refid="selectClause"/>
+        from
+            <include refid="tableClause"/>
+        <include refid="whereClause"/>
+    </select>
+
+    <select id="queryById" resultMap="task">
+        select
+            <include refid="selectClause"/>
+        from
+            <include refid="tableClause"/>
+        where
+            id = #{id}
+    </select>
+
+    <update id="updateById">
+        update
+            <include refid="tableClause"/>
+        set <include refid="setClause"></include>
+        where
+            id = #{id}
+    </update>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        insert into <include refid="tableClause"/>
+        set <include refid="setClause"></include>
+    </insert>
+</mapper>

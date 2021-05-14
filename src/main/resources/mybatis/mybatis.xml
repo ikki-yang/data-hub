@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <environments default="configDB">
+        <!-- 我们可以配置多个environment，需要通过id指定一个默认的 -->
+        <environment id="configDB">
+            <!-- 采用最原始的JDBC管理事务 -->
+            <transactionManager type="JDBC" />
+            <!-- 使用连接池连接数据，我们不需要再导入新的，mybatis内置了连接池 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}" />
+                <property name="url" value="${jdbc.url}" />
+                <property name="username" value="${user}" />
+                <property name="password" value="${password}" />
+                <property name="poolMaximumActiveConnections" value="1"/> <!--最大活跃连接数 -->
+                <property name="poolMaximumIdleConnections" value="0"/> <!--最大空闲连接数-->
+                <property name="poolTimeToWait" value="20000"/> <!--创建连接时最大等待时间(毫秒)-->
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper resource="mybatis/mapper/TaskMapper.xml" />
+    </mappers>
+</configuration>

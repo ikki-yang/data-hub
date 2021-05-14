@@ -1,0 +1,45 @@
+=============mysql==================
+docker run -p 3306:3306 --name mysql-dev -e MYSQL_ROOT_PASSWORD=123456 -d mysql:8.0.21
+
+docker exec -it mysql-dev bash
+
+mysql -uroot -p123456
+=============mysql==================
+
+
+=============oracle12c==================
+docker pull docker.io/sath89/oracle-12c
+docker run -p 1521:1521 -p 19000:8080 --name oracle12c-dev -e TZ=Asia/Shanghai -d sath89/oracle-12c:latest
+docker exec -it oracle12c-dev /bin/bash
+
+//进入容器后是root用户切换到oracle用户
+su oracle
+
+使用sysdba登陆
+$ORACLE_HOME/bin/sqlplus / as sysdba
+
+//create tablespace 表空间名称 datafile 表空间路劲 size 3000m;
+create tablespace devuser datafile '/u01/app/oracle/oradata/xe/devuser.dbf' size 3000m;
+
+//create user 用户名 identified by 密码 default tablespace 用户默认使用哪一个表空间;
+create user devuser identified by 123456 default tablespace devuser;
+
+//grant 角色1,角色2 to 用户名;
+grant dba, connect to devuser;
+
+//解锁用户
+alter user devuser account unlock;
+
+//修改密码有效期，默认180天改成无限制
+ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED
+
+用户名：system
+密码：oracle
+sid：xe
+
+用户名：devuser
+密码：123456
+sid：xe
+链接：jdbc:oracle:thin:@127.0.0.1:1521:XE
+=============oracle12c==================
+
