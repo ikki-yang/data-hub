@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS irmp DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE IF NOT EXISTS data_hub DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE `task` (
     `id`                      bigint(20)      NOT NULL    AUTO_INCREMENT  COMMENT '主键'

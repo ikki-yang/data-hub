@@ -22,6 +22,10 @@
     </environments>
 
     <mappers>
+        <mapper resource="mybatis/mapper/HandleMapper.xml" />
+        <mapper resource="mybatis/mapper/SinkMapper.xml" />
+        <mapper resource="mybatis/mapper/SourceMapper.xml" />
+        <mapper resource="mybatis/mapper/TaskLogMapper.xml" />
         <mapper resource="mybatis/mapper/TaskMapper.xml" />
     </mappers>
 </configuration>
