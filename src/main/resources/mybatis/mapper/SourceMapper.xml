@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- Mapper接口的全限定名 -->
-<mapper namespace="com.issac.studio.app.entity.mapper.TaskMapper" >
+<mapper namespace="com.issac.studio.app.entity.mapper.SourceMapper" >
     <resultMap id="source" type="com.issac.studio.app.entity.domain.Source">
         <result property="id" column="id" javaType="java.lang.Long"/>
         <result property="created" column="created" javaType="java.util.Date"/>
@@ -28,7 +28,7 @@
     </sql>
 
     <sql id="tableClause">
-        task
+        source
     </sql>
     <sql id="whereClause">
         <where>
@@ -82,7 +82,7 @@
             </if>
     </sql>
 
-    <select id="query" resultMap="task">
+    <select id="query" resultMap="source">
         select
             <include refid="selectClause"/>
         from
@@ -90,7 +90,7 @@
         <include refid="whereClause"/>
     </select>
 
-    <select id="queryById" resultMap="task">
+    <select id="queryById" resultMap="source">
         select
             <include refid="selectClause"/>
         from

@@ -37,6 +37,7 @@ public class Persistent {
 
             SqlSessionFactory build = new SqlSessionFactoryBuilder().build(resourceAsStream, prop);
             sqlSession = build.openSession(true);
+            log.info("初始化数据库连接成功！");
         } catch (IOException e) {
             log.error("创建mybatis的SqlSession发生错误，error=", e);
         }
