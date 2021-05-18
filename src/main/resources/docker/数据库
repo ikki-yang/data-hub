@@ -1,5 +1,5 @@
 =============mysql==================
-docker run -p 3306:3306 --name mysql-dev -e MYSQL_ROOT_PASSWORD=123456 -d mysql:8.0.21
+docker run -p 3306:3306 --name mysql-dev -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7.34
 
 docker exec -it mysql-dev bash
 
