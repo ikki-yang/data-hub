@@ -32,7 +32,7 @@ public class Persistent {
 
             Properties prop = new Properties();
             Map<String, String> config = new PropertiesUtil().getPropertyMap();
-            prop.put("username", config.get("jdbc.user"));
+            prop.put("username", config.get("jdbc.username"));
             prop.put("password", config.get("jdbc.password"));
 
             SqlSessionFactory build = new SqlSessionFactoryBuilder().build(resourceAsStream, prop);
