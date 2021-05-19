@@ -24,7 +24,7 @@ import java.util.*;
 public class Application {
     private final static Logger log = LoggerFactory.getLogger(Application.class);
 
-    private static Date startTime = new Date(); // 任务开始执行的时间
+    private final static Date startTime = new Date(); // 任务开始执行的时间
 
     public static void main(String[] args) {
         if (args.length != 2) {
