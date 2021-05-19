@@ -50,10 +50,10 @@
             <if test="taskKey != null and taskKey != ''">
                 and task_key = #{taskKey}
             </if>
-            <if test="startTime != null and startTime != ''">
+            <if test="startTime != null">
                 and start_time = #{startTime}
             </if>
-            <if test="endTime != null and endTime != ''">
+            <if test="endTime != null">
                 and end_time = #{endTime}
             </if>
             <if test="status != null">
@@ -77,10 +77,10 @@
             <if test="taskKey != null and taskKey != ''">
                 task_key = #{taskKey},
             </if>
-            <if test="startTime != null and startTime != ''">
+            <if test="startTime != null">
                 start_time = #{startTime},
             </if>
-            <if test="endTime != null and endTime != ''">
+            <if test="endTime != null">
                 end_time = #{endTime},
             </if>
             <if test="status != null">

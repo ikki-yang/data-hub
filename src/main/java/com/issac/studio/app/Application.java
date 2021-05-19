@@ -117,12 +117,14 @@ public class Application {
             if(e != null){
                 taskLog.setErrorLog(ExceptionUtils.getStackTrace(e));
             }
+            taskLog.setCreated(new Date());
+            taskLog.setModified(new Date());
             taskLog.setYn(1);
 
             TaskLogMapper mapper = Persistent.getMapper(TaskLogMapper.class);
             mapper.insert(taskLog);
         }catch (Exception e1){
-            log.info("写日志步骤发生异常，异常日志无法记录到数据库中！error=", e);
+            log.info("写日志步骤发生异常，异常日志无法记录到数据库中！error=", e1);
         }
     }
 
