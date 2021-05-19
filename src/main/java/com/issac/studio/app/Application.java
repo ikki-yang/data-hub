@@ -59,7 +59,7 @@ public class Application {
                         execHandles(preHandles, eParam);
                     }
 
-                    sparkSession = buildSparkSession(task, startTime);
+                    sparkSession = buildSparkSession(task);
 
                     buildSource(sparkSession, sources, eParam);
                     Dataset<Row> resultDS = buildTransform(sparkSession, task.getTransformSql(), eParam);
@@ -141,7 +141,7 @@ public class Application {
         log.info("关闭sparkSession链接");
     }
 
-    private static void execHandles(List<Handle> handles, ExternalParam eParam) throws Exception{
+    private static void execHandles(List<Handle> handles, ExternalParam eParam) {
         for(Handle item: handles){
             try {
                 Class<?> configClass = Class.forName(item.getHandleConfigType());
@@ -175,12 +175,11 @@ public class Application {
     /**
      * 根据配置创建sparkSession对象
      * @param task : task
-     * @param startTime : startTime
      * @author issac.young
      * @date 2020/12/10 3:53 下午
      * @return org.apache.spark.sql.SparkSession
      */
-    private static SparkSession buildSparkSession(Task task, Date startTime){
+    private static SparkSession buildSparkSession(Task task){
         log.info("开始build sparkSession！");
 
         String appName = "sqlBase-" + task.getTaskKey() + "-" + startTime.getTime();
@@ -210,7 +209,6 @@ public class Application {
      *
      * @param session : session
      * @param sources : readers
-     * @return void
      * @author issac.young
      * @date 2020/12/4 2:36 下午
      */
@@ -243,7 +241,6 @@ public class Application {
      *
      * @param ds      : ds
      * @param sinks : writers
-     * @return void
      * @author issac.young
      * @date 2020/12/4 2:34 下午
      */
@@ -266,7 +263,7 @@ public class Application {
      * @author issac.young
      * @date 2020/12/3 9:22 上午
      */
-    private static Task getTask(String taskKey) throws Exception{
+    private static Task getTask(String taskKey) {
         TaskMapper taskMapper = Persistent.getMapper(TaskMapper.class);
         Task task = new Task();
         task.setTaskKey(taskKey);
@@ -286,7 +283,7 @@ public class Application {
      * @author issac.young
      * @date 2020/12/4 2:33 下午
      */
-    private static List<Sink> getSinks(Long taskId) throws Exception{
+    private static List<Sink> getSinks(Long taskId) {
         SinkMapper sinkMapper = Persistent.getMapper(SinkMapper.class);
         List<Sink> sinks = sinkMapper.query(new Sink(taskId));
         if (sinks == null || sinks.size() == 0) {
@@ -303,7 +300,7 @@ public class Application {
      * @author issac.young
      * @date 2020/12/4 2:34 下午
      */
-    private static List<Source> getSources(Long taskId) throws Exception{
+    private static List<Source> getSources(Long taskId) {
         SourceMapper sourceMapper = Persistent.getMapper(SourceMapper.class);
         List<Source> sources = sourceMapper.query(new Source(taskId));
         if (sources == null || sources.size() == 0) {
