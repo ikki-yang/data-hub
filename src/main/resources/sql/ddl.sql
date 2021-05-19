@@ -1,5 +1,7 @@
 CREATE DATABASE IF NOT EXISTS data_hub DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
 
+use data_hub;
+
 CREATE TABLE `task` (
     `id`                      bigint(20)      NOT NULL    AUTO_INCREMENT  COMMENT '主键'
     , `task_key`              varchar(50)     NOT NULL                    COMMENT '任务编号'
