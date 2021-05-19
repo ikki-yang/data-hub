@@ -273,7 +273,7 @@ public class Application {
         task.setYn(1);
         List<Task> tasks = taskMapper.query(task);
         if (tasks == null || tasks.size() == 0) {
-            throw new NotFoundException(String.format("未在数据库中国找到该任务！taskKey={%s}", taskKey));
+            throw new NotFoundException(String.format("未在数据库中找到该任务！taskKey={%s}", taskKey));
         }
         return tasks.get(0);
     }
