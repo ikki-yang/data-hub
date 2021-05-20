@@ -1,18 +1,15 @@
 1、获取镜像
-docker pull cloudera/quickstart
+docker pull mesosphere/spark:2.2.1-2.2.0-2-beta-hadoop-2.6
 
 2、从镜像创建容器
-docker run -m 10240M --memory-swap -1 --name cdh -d --hostname=quickstart.cloudera --privileged=true -t -i -p 8888:8888 -p 8020:8020 -p 8022:8022 -p 7180:7180 -p 21050:21050 -p 50070:50070 -p 50075:50075 -p 50010:50010 -p 50020:50020 -p 8890:8890 -p 60010:60010 -p 10002:10002 -p 25010:25010 -p 25020:25020 -p 18088:18088 -p 8088:8088 -p 19888:19888 -p 7187:7187 -p 11000:11000 cloudera/quickstart /usr/bin/docker-quickstart
+docker run --name spark -d --hostname=spark.local --privileged=true -t -i -p 8888:8888 -p 8020:8020 -p 8022:8022 -p 7180:7180 -p 21050:21050 -p 50070:50070 -p 50075:50075 -p 50010:50010 -p 50020:50020 -p 8890:8890 -p 60010:60010 -p 10002:10002 -p 25010:25010 -p 25020:25020 -p 18088:18088 -p 8088:8088 -p 19888:19888 -p 7187:7187 -p 11000:11000 mesosphere/spark:2.2.1-2.2.0-2-beta-hadoop-2.6
+
 参数解释：
-
-–hostname：cdh5分布式指定一个域名(quickstart.cloudera是127.0.0.1的映射，需要在物理机hosts文件中添加)
-
+–hostname：cdh5分布式指定一个域名(spark.local是127.0.0.1的映射，需要在物理机hosts文件中添加)
 –privileged：给予容器内的root用户以真正的root权限
-
 -t -i：让docker分配一个伪终端并绑定到容器的标准输入上并保持打开
 
 CDH全家桶端口众多，端口的用途参看下表，按需开放
-
 | 组件 | 端口号 | 端口用途 |
 | —————————– | —— | ——————————————————– |
 | Cloudera Management Service | 8087 | Activity Monitor Web UI 端口 |
@@ -96,9 +93,4 @@ CDH全家桶端口众多，端口的用途参看下表，按需开放
 | Hue | 8888 | Hue HTTP端口 |
 
 3、进入容器内部
-docker exec -it cdh bash
-
-4、在容器内部执行，启动cm
-sudo /home/cloudera/cloudera-manager --express --force
-
-5、在物理机浏览器访问http://quickstart.cloudera:7180/cmf/home
+docker exec -it spark bash
