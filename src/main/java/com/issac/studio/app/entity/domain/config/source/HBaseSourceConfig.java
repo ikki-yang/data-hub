@@ -9,5 +9,5 @@ package com.issac.studio.app.entity.domain.config.source;
  * @copyright (C), 1992-2021, issac
  */
 public class HBaseSourceConfig extends AbstractSourceConfig {
-
+    private Field[] fields;
 }
