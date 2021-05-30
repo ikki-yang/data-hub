@@ -9,5 +9,29 @@ package com.issac.studio.app.entity.domain.config.source;
  * @copyright (C), 1992-2021, issac
  */
 public class HBaseSourceConfig extends AbstractSourceConfig {
+    /**
+     * 要读取的hbase表名
+     */
+    private String sourceTable;
+
+    /**
+     * hbase表对应的
+     */
     private Field[] fields;
+
+    public String getSourceTable() {
+        return sourceTable;
+    }
+
+    public void setSourceTable(String sourceTable) {
+        this.sourceTable = sourceTable;
+    }
+
+    public Field[] getFields() {
+        return fields;
+    }
+
+    public void setFields(Field[] fields) {
+        this.fields = fields;
+    }
 }

@@ -1,7 +1,6 @@
 package com.issac.studio.app.source;
 
 import com.issac.studio.app.entity.domain.config.source.HBaseSourceConfig;
-import com.issac.studio.app.entity.domain.config.source.JdbcSourceConfig;
 import com.issac.studio.app.entity.dto.ExternalParam;
 import com.issac.studio.app.exception.NullException;
 import com.issac.studio.app.exception.TypeException;
