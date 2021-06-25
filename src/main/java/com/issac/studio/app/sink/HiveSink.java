@@ -3,6 +3,7 @@ package com.issac.studio.app.sink;
 
 import com.issac.studio.app.entity.domain.Sink;
 import com.issac.studio.app.entity.domain.config.sink.HiveSinkConfig;
+import com.issac.studio.app.entity.dto.ExternalParam;
 import com.issac.studio.app.exception.NullException;
 import com.issac.studio.app.exception.TypeException;
 import org.apache.spark.sql.Dataset;
@@ -22,7 +23,7 @@ public class HiveSink extends com.issac.studio.app.sink.Sink {
     private final static Logger log = LoggerFactory.getLogger(HiveSink.class);
 
     @Override
-    public void sink(Dataset<Row> ds, Sink sink) throws Exception {
+    public void sink(Dataset<Row> ds, Sink sink, ExternalParam eParam) throws Exception {
         HiveSinkConfig hiveSinkConfig;
         if (sink != null) {
             if (sink.getSinkConfigEntity() instanceof HiveSinkConfig) {

@@ -2,6 +2,7 @@ package com.issac.studio.app.sink;
 
 import com.issac.studio.app.entity.domain.Sink;
 import com.issac.studio.app.entity.domain.config.sink.HBaseSinkConfig;
+import com.issac.studio.app.entity.dto.ExternalParam;
 import com.issac.studio.app.exception.NullException;
 import com.issac.studio.app.exception.TypeException;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +42,7 @@ public class HBaseSink extends com.issac.studio.app.sink.Sink {
     private final static Logger log = LoggerFactory.getLogger(HBaseSink.class);
 
     @Override
-    public void sink(Dataset<Row> ds, Sink sink) throws Exception {
+    public void sink(Dataset<Row> ds, Sink sink, ExternalParam eParam) throws Exception {
         HBaseSinkConfig hbaseSinkConfig;
         if (sink != null) {
             if (sink.getSinkConfigEntity() instanceof HBaseSinkConfig) {
@@ -171,9 +172,9 @@ public class HBaseSink extends com.issac.studio.app.sink.Sink {
         return map;
     }
 
-    private class RegionPartitioner extends Partitioner {
-        private String[] endKeys;
-        private int numPartitions;
+    private static class RegionPartitioner extends Partitioner {
+        private final String[] endKeys;
+        private final int numPartitions;
 
         public RegionPartitioner(String[] endKeys) {
             this.endKeys = endKeys;

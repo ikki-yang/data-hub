@@ -63,7 +63,7 @@ public class Application {
 
                     buildSource(sparkSession, sources, eParam);
                     Dataset<Row> resultDS = buildTransform(sparkSession, task.getTransformSql(), eParam);
-                    sink(resultDS, sinks);
+                    sink(resultDS, sinks, eParam);
 
                     if(!afterHandles.isEmpty()){
                         log.info("发现after类型的handle，现在开始执行该handle！");
@@ -241,17 +241,18 @@ public class Application {
      *
      * @param ds      : ds
      * @param sinks : writers
+     * @param eParam
      * @author issac.young
      * @date 2020/12/4 2:34 下午
      */
-    private static void sink(Dataset<Row> ds, List<Sink> sinks) throws Exception {
+    private static void sink(Dataset<Row> ds, List<Sink> sinks, ExternalParam eParam) throws Exception {
         for (Sink item : sinks) {
             Class<?> configClass = Class.forName(item.getSinkType());
             AbstractSinkConfig writerConfig = (AbstractSinkConfig) JSONObject.parseObject(item.getSinkConfigJson(), configClass);
             item.setSinkConfigEntity(writerConfig);
 
             com.issac.studio.app.sink.Sink sink = (com.issac.studio.app.sink.Sink) Class.forName(item.getSinkType()).newInstance();
-            sink.sink(ds, item);
+            sink.sink(ds, item, eParam);
         }
     }
 
