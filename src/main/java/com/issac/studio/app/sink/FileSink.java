@@ -1,7 +1,6 @@
 package com.issac.studio.app.sink;
 
 import com.issac.studio.app.entity.domain.config.sink.FileSinkConfig;
-import com.issac.studio.app.entity.domain.config.sink.JdbcSinkConfig;
 import com.issac.studio.app.entity.dto.ExternalParam;
 import com.issac.studio.app.exception.NullException;
 import com.issac.studio.app.exception.TypeException;
