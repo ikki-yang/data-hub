@@ -1,5 +1,5 @@
 <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">data-hub v1.0-SNAPSHOT</h1>
-<h4 align="center">用SQL的方式实现离线多数据源混合计算和互倒！</h4>
+<h4 align="center">用SQL的方式实现离线多数据源混合计算和互导！</h4>
 
 ---
 
@@ -15,11 +15,7 @@ data-hub是一个能接入多种数据源，使用SparkSQL作为通道，最终�
 
 ## 部署
 
-data-hub的使用非常简单，有多简单呢？你只需要：
-``` shell script
-sh DATA_HUB.sh $task_key $20210514
-```
-但是在执行之前你需要3个简单的步骤：
+data-hub的使用非常简单，有多简单呢？你只需要： 在执行之前你需要3个简单的步骤：
 
 1、在MySQL数据库中执行ddl.sql文件中的语句，将该MySQL的域名或者ip地址配置到prod.properties文件中
 
@@ -29,10 +25,15 @@ mvn clean package -D maven.test.skip=true -P prod
 ```
 3、将jar包、DATA_HUB.sh、DATA_HUB_LOCAL.sh(这个可以不放到driver上)放到大数据driver机器的 /home/xxuser/xxx/ 目录下
 
-## demo使用
-1、执行【部署】过程中的【步骤1】后，在demo.sql文件中有demo演示使用的数据，执行这些inset语句
+4、执行以下命令
+``` shell script
+sh DATA_HUB.sh $task_key $20210514
+```
 
-2、按照【部署】过程的【步骤2】【步骤3】执行，即可看到效果
+## demo使用
+1、执行【部署】过程中的【步骤1】后，在demo.sql文件中有demo演示使用的数据，执行这些insert语句
+
+2、按照【部署】过程的【步骤2】【步骤3】【步骤4】执行，即可看到效果
 
 
 如果不小心发现了bug，热烈欢迎给项目提交pr，手动笑脸！！！
