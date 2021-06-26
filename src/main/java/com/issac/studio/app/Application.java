@@ -83,7 +83,7 @@ public class Application {
             }
         } catch (Exception e) {
             if(e instanceof HandleException){
-                log.error("handle执行过程发生异常，error=", e);
+                log.error("PreHandle或者AfterHandle执行过程发生异常，error=", e);
                 insetTaskLog(taskKey, 3, e);
             }else {
                 log.error("主流程执行过程中发生异常，error=", e);
