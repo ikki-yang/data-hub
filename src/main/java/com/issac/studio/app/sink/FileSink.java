@@ -34,9 +34,9 @@ public class FileSink extends Sink{
         Integer partitionNum = fileSinkConfig.getPartitionNum();
 
         if(null != partitionNum){
-            ds.repartition(partitionNum).write().format(fileFormat).save(filePath + "/" + fileName);
+            ds.repartition(partitionNum).write().format(fileFormat).save(filePath + fileName);
         }else {
-            ds.write().format(fileFormat).save(filePath + "/" + fileName);
+            ds.write().format(fileFormat).save(filePath + fileName);
         }
 
         log.info("sink sinkId={}成功", sink.getId());
