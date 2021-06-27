@@ -17,7 +17,7 @@ public abstract class Sink {
      * 根据sink里面的内容将数据写到相应的目的地
      * @param ds : ds
      * @param sink : sink
-     * @param eParam
+     * @param eParam : eParam
      * @author issac.young
      * @date 2020/12/4 2:28 下午
      * @return void
