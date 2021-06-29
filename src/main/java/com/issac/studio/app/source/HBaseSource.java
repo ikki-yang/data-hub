@@ -1,14 +1,26 @@
 package com.issac.studio.app.source;
 
+import com.issac.studio.app.entity.domain.config.source.Field;
 import com.issac.studio.app.entity.domain.config.source.HBaseSourceConfig;
 import com.issac.studio.app.entity.dto.ExternalParam;
 import com.issac.studio.app.exception.NullException;
 import com.issac.studio.app.exception.TypeException;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
+import org.apache.hadoop.hbase.mapreduce.TableInputFormat;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.function.Function;
+import org.apache.spark.rdd.RDD;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scala.Function1;
+import scala.Tuple2;
 
 /**
  * @description: 从HBase读取数据
@@ -36,6 +48,23 @@ public class HBaseSource extends com.issac.studio.app.source.Source{
             throw new NullException(msg);
         }
         log.info("开始build sourceId={}数据源的dataset", source.getId());
+
+        String sourceTable = hBaseSourceConfig.getSourceTable();
+
+        Configuration conf = HBaseConfiguration.create();
+        conf.set(TableInputFormat.INPUT_TABLE, sourceTable);
+
+        JavaRDD<Tuple2<ImmutableBytesWritable, Result>> hbaseRDD = session.sparkContext().newAPIHadoopRDD(conf, TableInputFormat.class,
+                ImmutableBytesWritable.class, Result.class).toJavaRDD();
+
+        hbaseRDD.map(new Function<Tuple2<ImmutableBytesWritable, Result>, Row>() {
+            @Override
+            public Row call(Tuple2<ImmutableBytesWritable, Result> v1) throws Exception {
+                Result result = v1._2;
+                Cell current = result.current();
+                return null;
+            }
+        });
 
         return null;
     }
