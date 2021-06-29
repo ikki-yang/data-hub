@@ -11,6 +11,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableInputFormat;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.rdd.RDD;
@@ -21,6 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.Function1;
 import scala.Tuple2;
+
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
 
 /**
  * @description: 从HBase读取数据
@@ -50,6 +55,7 @@ public class HBaseSource extends com.issac.studio.app.source.Source{
         log.info("开始build sourceId={}数据源的dataset", source.getId());
 
         String sourceTable = hBaseSourceConfig.getSourceTable();
+        String columnFamily = hBaseSourceConfig.getColumnFamily();
 
         Configuration conf = HBaseConfiguration.create();
         conf.set(TableInputFormat.INPUT_TABLE, sourceTable);
@@ -61,7 +67,11 @@ public class HBaseSource extends com.issac.studio.app.source.Source{
             @Override
             public Row call(Tuple2<ImmutableBytesWritable, Result> v1) throws Exception {
                 Result result = v1._2;
-                Cell current = result.current();
+                /*
+                  {"columnFamily": {"columnFamily": "cf", "qualifiers": ["hbaseField1", "hbaseField2","], "mappedField": ["field1", "field2"]}}
+                 */
+                Cell cell = result.getColumnLatestCell(Bytes.toBytes(""), Bytes.toBytes(""));
+
                 return null;
             }
         });

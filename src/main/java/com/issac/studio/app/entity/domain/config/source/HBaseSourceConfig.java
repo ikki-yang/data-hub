@@ -14,10 +14,7 @@ public class HBaseSourceConfig extends AbstractSourceConfig {
      */
     private String sourceTable;
 
-    /**
-     * hbase表对应的
-     */
-    private Field[] fields;
+    private String columnFamily;
 
     public String getSourceTable() {
         return sourceTable;
@@ -27,11 +24,11 @@ public class HBaseSourceConfig extends AbstractSourceConfig {
         this.sourceTable = sourceTable;
     }
 
-    public Field[] getFields() {
-        return fields;
+    public String getColumnFamily() {
+        return columnFamily;
     }
 
-    public void setFields(Field[] fields) {
-        this.fields = fields;
+    public void setColumnFamily(String columnFamily) {
+        this.columnFamily = columnFamily;
     }
 }
