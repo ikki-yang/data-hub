@@ -11,6 +11,7 @@
         <result property="yn" column="yn" javaType="java.lang.Integer"/>
         <result property="taskKey" column="task_key" javaType="java.lang.String"/>
         <result property="taskName" column="task_name" javaType="java.lang.String"/>
+        <result property="jarPath" column="jar_path" javaType="java.lang.String"/>
         <result property="transformSql" column="transform_sql" javaType="java.lang.String"/>
         <result property="hiveSupport" column="hive_support" javaType="java.lang.Integer"/>
         <result property="sparkConfig" column="spark_config" javaType="java.lang.String"/>
@@ -23,6 +24,7 @@
         , yn
         , task_key
         , task_name
+        , jar_path
         , transform_sql
         , hive_support
         , spark_config
@@ -55,6 +57,9 @@
             <if test="taskName != null and taskName != ''">
                 and task_name = #{taskName}
             </if>
+            <if test="jarPath != null and jarPath != ''">
+                and jar_path = #{jarPath}
+            </if>
             <if test="latch != null">
                 and latch = #{latch}
             </if>
@@ -78,6 +83,9 @@
             </if>
             <if test="taskName != null and taskName != ''">
                 task_name = #{taskName},
+            </if>
+            <if test="jarPath != null and jarPath != ''">
+                jar_path = #{jarPath},
             </if>
             <if test="transformSql != null and transformSql != ''">
                 transform_sql = #{transformSql},

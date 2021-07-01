@@ -11,6 +11,7 @@ package com.issac.studio.app.entity.domain;
 public class Task extends AbstractDomain {
     private String taskKey;
     private String taskName;
+    private String jarPath;
     private String transformSql;
     /**
      * 是否需要读取或者写hive表 1：需要；2：不需要
@@ -46,6 +47,14 @@ public class Task extends AbstractDomain {
 
     public String getTaskName() {
         return taskName;
+    }
+
+    public String getJarPath() {
+        return jarPath;
+    }
+
+    public void setJarPath(String jarPath) {
+        this.jarPath = jarPath;
     }
 
     public void setTaskName(String taskName) {

@@ -1,25 +1,16 @@
 package com.issac.studio.app;
 
 import com.alibaba.fastjson.JSONObject;
-import com.issac.studio.app.entity.domain.*;
-import com.issac.studio.app.entity.domain.config.handle.AbstractHandleConfig;
-import com.issac.studio.app.entity.domain.config.sink.AbstractSinkConfig;
-import com.issac.studio.app.entity.domain.config.source.AbstractSourceConfig;
-import com.issac.studio.app.entity.dto.ExternalParam;
-import com.issac.studio.app.entity.mapper.*;
-import com.issac.studio.app.exception.HandleException;
+import com.issac.studio.app.entity.domain.Task;
+import com.issac.studio.app.entity.mapper.TaskMapper;
 import com.issac.studio.app.exception.NotFoundException;
 import com.issac.studio.app.persistent.Persistent;
-import com.issac.studio.app.transform.Transform;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.spark.SparkConf;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.List;
 
 public class Application {
     private final static Logger log = LoggerFactory.getLogger(Application.class);
@@ -35,7 +26,26 @@ public class Application {
         String taskKey = args[0];
         String paramDt = args[1];
         Task task = getTask(taskKey);
+        String jarPath = task.getJarPath();
+        String sparkConfig = task.getSparkConfig();
 
+        StringBuilder commandToExec = new StringBuilder();
+        commandToExec.append("spark-submit --class com.issac.studio.app.Application ");
+        commandToExec.append(jarPath + " ");
+
+
+        CommandLine cmd = CommandLine.parse(commandToExec.toString());
+        DefaultExecutor executor = new DefaultExecutor();
+        try {
+            int exitValue = executor.execute(cmd);
+            if (exitValue != 0) {
+                log.info("命令未执行完成就推出了程序！ exit value={}", exitValue);
+            } else {
+                log.info("命令执行完成！ exit value={}", exitValue);
+            }
+        } catch (Exception e) {
+            log.error("命令执行过程报错，错误不向外抛出，error=", e);
+        }
 
     }
 
