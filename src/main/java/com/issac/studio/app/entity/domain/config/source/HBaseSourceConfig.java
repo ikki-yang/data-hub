@@ -12,23 +12,23 @@ public class HBaseSourceConfig extends AbstractSourceConfig {
     /**
      * 要读取的hbase表名
      */
-    private String sourceTable;
+    private String tableName;
 
-    private String columnFamily;
+    private Description description;
 
-    public String getSourceTable() {
-        return sourceTable;
+    public String getTableName() {
+        return tableName;
     }
 
-    public void setSourceTable(String sourceTable) {
-        this.sourceTable = sourceTable;
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 
-    public String getColumnFamily() {
-        return columnFamily;
+    public Description getDescription() {
+        return description;
     }
 
-    public void setColumnFamily(String columnFamily) {
-        this.columnFamily = columnFamily;
+    public void setDescription(Description description) {
+        this.description = description;
     }
 }

@@ -1,10 +1,12 @@
 package com.issac.studio.app.source;
 
+import com.issac.studio.app.entity.domain.config.source.Description;
 import com.issac.studio.app.entity.domain.config.source.Field;
 import com.issac.studio.app.entity.domain.config.source.HBaseSourceConfig;
 import com.issac.studio.app.entity.dto.ExternalParam;
 import com.issac.studio.app.exception.NullException;
 import com.issac.studio.app.exception.TypeException;
+import com.issac.studio.app.util.TypeUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -14,18 +16,18 @@ import org.apache.hadoop.hbase.mapreduce.TableInputFormat;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
-import org.apache.spark.rdd.RDD;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.Function1;
 import scala.Tuple2;
 
-import java.util.List;
-import java.util.Map;
-import java.util.NavigableMap;
+import java.util.ArrayList;
 
 /**
  * @description: 从HBase读取数据
@@ -35,7 +37,7 @@ import java.util.NavigableMap;
  * @since: v1.0.0
  * @copyright (C), 1992-2021, issac
  */
-public class HBaseSource extends com.issac.studio.app.source.Source{
+public class HBaseSource extends com.issac.studio.app.source.Source {
     private final static Logger log = LoggerFactory.getLogger(HBaseSource.class);
 
     @Override
@@ -54,28 +56,46 @@ public class HBaseSource extends com.issac.studio.app.source.Source{
         }
         log.info("开始build sourceId={}数据源的dataset", source.getId());
 
-        String sourceTable = hBaseSourceConfig.getSourceTable();
-        String columnFamily = hBaseSourceConfig.getColumnFamily();
+        String tableName = hBaseSourceConfig.getTableName();
+        Description description = hBaseSourceConfig.getDescription();
+        String columnFamily = description.getColumnFamily();
+        String[] qualifiers = description.getQualifiers();
+        Field[] fields = description.getFields();
+
+        ArrayList<StructField> structFields = new ArrayList<>();
+        for (Field field : fields) {
+            StructField structField = DataTypes.createStructField(
+                    field.getName(), TypeUtil.typeMap(field.getType()), true);
+            structFields.add(structField);
+        }
+        StructType schema = DataTypes.createStructType(structFields);
 
         Configuration conf = HBaseConfiguration.create();
-        conf.set(TableInputFormat.INPUT_TABLE, sourceTable);
+        conf.set(TableInputFormat.INPUT_TABLE, tableName);
 
         JavaRDD<Tuple2<ImmutableBytesWritable, Result>> hbaseRDD = session.sparkContext().newAPIHadoopRDD(conf, TableInputFormat.class,
                 ImmutableBytesWritable.class, Result.class).toJavaRDD();
 
-        hbaseRDD.map(new Function<Tuple2<ImmutableBytesWritable, Result>, Row>() {
+        JavaRDD<Row> rowJavaRDD = hbaseRDD.map(new Function<Tuple2<ImmutableBytesWritable, Result>, Row>() {
             @Override
             public Row call(Tuple2<ImmutableBytesWritable, Result> v1) throws Exception {
                 Result result = v1._2;
-                /*
-                  {"columnFamily": {"columnFamily": "cf", "qualifiers": ["hbaseField1", "hbaseField2","], "mappedField": ["field1", "field2"]}}
-                 */
-                Cell cell = result.getColumnLatestCell(Bytes.toBytes(""), Bytes.toBytes(""));
-
-                return null;
+                String[] values = new String[qualifiers.length];
+                for (int i = 0; i < qualifiers.length; i++) {
+                    String qualifier = qualifiers[i];
+                    Cell cell = result.getColumnLatestCell(Bytes.toBytes(columnFamily), Bytes.toBytes(qualifier));
+                    if (cell != null) {
+                        values[i] = Bytes.toString(cell.getValueArray());
+                    } else {
+                        values[i] = null;
+                    }
+                }
+                Object[] cols = TypeUtil.typeFormat(values, schema);
+                return RowFactory.create(cols);
             }
         });
 
-        return null;
+        log.info("build sourceId={}数据源成功", source.getId());
+        return session.createDataFrame(rowJavaRDD, schema);
     }
 }
