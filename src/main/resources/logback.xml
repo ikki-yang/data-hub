@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="logFile" value="${TASK_KEY}"/>
-    <property name="fileDate" value="${PARAM_DT}"/>
+<!--    <property name="logFile" value="${TASK_KEY}"/>-->
+<!--    <property name="fileDate" value="${PARAM_DT}"/>-->
     <!-- 控制台输出 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -9,21 +9,21 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
         </encoder>
     </appender>
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>${log.home}/${logFile}_${fileDate}.log</file>
-        <append>true</append>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-        </encoder>
-    </appender>
+<!--    <appender name="FILE" class="ch.qos.logback.core.FileAppender">-->
+<!--        <file>${log.home}/${logFile}_${fileDate}.log</file>-->
+<!--        <append>true</append>-->
+<!--        <encoder>-->
+<!--            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
 
     <!-- 日志输出级别 -->
     <root level="${log.level}">
-        <if condition='"dev".equals("@env@")'>
+<!--        <if condition='"dev".equals("@env@")'>-->
             <then>
                 <appender-ref ref="STDOUT" />
             </then>
-        </if>
-        <appender-ref ref="FILE" />
+<!--        </if>-->
+<!--        <appender-ref ref="FILE" />-->
     </root>
 </configuration>
