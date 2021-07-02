@@ -172,6 +172,9 @@ public class HBaseSink extends com.issac.studio.app.sink.Sink {
         return map;
     }
 
+    /**
+     * 自定义spark的Partitioner，设计思想参考了hadoop中MapReduce
+     */
     private static class RegionPartitioner extends Partitioner {
         private final String[] endKeys;
         private final int numPartitions;
