@@ -186,9 +186,13 @@ public class SparkMain {
 
         String appName = "sqlBase-" + task.getTaskKey() + "-" + startTime.getTime();
         JSONObject jsonObject = JSONObject.parseObject(task.getSparkConfig());
+        String master = jsonObject.getString("master");
+
         SparkConf sparkConf = new SparkConf();
-        for(Map.Entry<String, Object> entry : jsonObject.entrySet()){
-            sparkConf.set(entry.getKey(), String.valueOf(entry.getValue()));
+        if(master.startsWith("local")){
+            for(Map.Entry<String, Object> entry : jsonObject.entrySet()){
+                sparkConf.set(entry.getKey(), String.valueOf(entry.getValue()));
+            }
         }
 
         SparkSession.Builder builder = SparkSession
