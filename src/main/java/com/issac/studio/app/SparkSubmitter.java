@@ -38,17 +38,28 @@ public class SparkSubmitter {
 
         StringBuilder commandToExec = new StringBuilder();
         if (master.startsWith("local")) {
-            commandToExec.append("java -cp com.issac.studio.app.SparkMain ");
+            commandToExec.append("java -cp ")
+                    .append(jarPath)
+                    .append(" ")
+                    .append("com.issac.studio.app.SparkMain ");
         } else {
             commandToExec.append("spark-submit --class com.issac.studio.app.SparkMain ");
             for (Map.Entry<String, Object> entry : configJson.entrySet()) {
                 String key = entry.getKey();
                 String value = String.valueOf(entry.getValue());
-                commandToExec.append("--").append(key).append(" ").append(value).append(" ");
+                commandToExec.append("--")
+                        .append(key)
+                        .append(" ")
+                        .append(value)
+                        .append(" ");
             }
+            commandToExec.append(jarPath)
+                    .append(" ");
         }
 
-        commandToExec.append(jarPath).append(" ").append(taskKey).append(" ").append(paramDt);
+        commandToExec.append(taskKey)
+                .append(" ")
+                .append(paramDt);
 
         log.info("即将执行的cmd命令：{}", commandToExec);
         CommandLine cmd = CommandLine.parse(commandToExec.toString());
