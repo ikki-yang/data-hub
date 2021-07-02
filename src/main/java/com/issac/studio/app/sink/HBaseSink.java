@@ -153,14 +153,14 @@ public class HBaseSink extends com.issac.studio.app.sink.Sink {
         log.info("sink sinkId={}成功", sink.getId());
     }
 
+    /**
+     * 解析HBaseConfiguration需要参数，格式为："hbase.mapreduce.bulkload.max.hfiles.perRegion.perFamily:3200,xxx.xxx.xx:323"
+     * @param hBaseConfig : hBaseConfig
+     * @author issac.young
+     * @date 2021/5/12 9:14 上午
+     * @return java.util.HashMap<java.lang.String, java.lang.String>
+     */
     public HashMap<String, String> parseHBaseConfig(String hBaseConfig) {
-        /**
-         * 解析HBaseConfiguration需要参数，格式为："hbase.mapreduce.bulkload.max.hfiles.perRegion.perFamily:3200,xxx.xxx.xx:323"
-         * @param hBaseConfig : hBaseConfig
-         * @author issac.young
-         * @date 2021/5/12 9:14 上午
-         * @return java.util.HashMap<java.lang.String, java.lang.String>
-         */
         HashMap<String, String> map = new HashMap<>();
         if (StringUtils.isNotBlank(hBaseConfig)) {
             String[] keyValues = hBaseConfig.split(",");
