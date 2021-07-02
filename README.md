@@ -17,7 +17,7 @@ data-hub是一个能接入多种数据源，使用SparkSQL作为通道，最终�
 
 data-hub的使用非常简单，有多简单呢？你只需要： 在执行之前你需要3个简单的步骤：
 
-1、在MySQL数据库中执行ddl.sql文件中的语句，将该MySQL的域名或者ip地址配置到prod.properties文件中
+1、在MySQL数据库中执行ddl.sql文件中的语句，将该MySQL的域名或者ip地址配置到prod.properties文件中，在resources/docker目录下有docker安装数据库的命令，喜欢docker的同学可以尝试
 
 2、打包项目成一个jar包：
 ```shell script
