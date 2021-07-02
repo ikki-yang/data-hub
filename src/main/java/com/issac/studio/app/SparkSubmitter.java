@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.issac.studio.app.entity.domain.Task;
 import com.issac.studio.app.entity.mapper.TaskMapper;
 import com.issac.studio.app.exception.NotFoundException;
-import com.issac.studio.app.param.ParamHandler;
 import com.issac.studio.app.persistent.Persistent;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -13,6 +12,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -37,50 +37,50 @@ public class SparkSubmitter {
         String master = configJson.getString("master");
 
         StringBuilder commandToExec = new StringBuilder();
-        if ("local".equals(master)) {
-            commandToExec.append("java --class com.issac.studio.app.SparkMain \\");
+        if (master.startsWith("local")) {
+            commandToExec.append("java -cp com.issac.studio.app.SparkMain ");
         } else {
-            commandToExec.append("spark-submit --class com.issac.studio.app.SparkMain \\");
-        }
-
-
-        for (Map.Entry<String, Object> entry : configJson.entrySet()) {
-            String key = entry.getKey();
-            String value = String.valueOf(entry.getValue());
-            commandToExec.append("--").append(key).append(" ").append(value).append("\\");
+            commandToExec.append("spark-submit --class com.issac.studio.app.SparkMain ");
+            for (Map.Entry<String, Object> entry : configJson.entrySet()) {
+                String key = entry.getKey();
+                String value = String.valueOf(entry.getValue());
+                commandToExec.append("--").append(key).append(" ").append(value).append(" ");
+            }
         }
 
         commandToExec.append(jarPath).append(" ").append(taskKey).append(" ").append(paramDt);
 
+        log.info("即将执行的cmd命令：{}", commandToExec);
+        CommandLine cmd = CommandLine.parse(commandToExec.toString());
+        DefaultExecutor executor = new DefaultExecutor();
+        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
+        executor.setStreamHandler(new PumpStreamHandler(byteArrayOS, byteArrayOS));
         try {
-            CommandLine cmd = CommandLine.parse(commandToExec.toString());
-            DefaultExecutor executor = new DefaultExecutor();
-            ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-            executor.setStreamHandler(new PumpStreamHandler(byteArrayOS, byteArrayOS));
+            int exitValue = executor.execute(cmd);
+
+            String retStr = byteArrayOS.toString().trim();
+            log.info("获取到执行SparkSubmitter返回的stream: {}", retStr);
+            byteArrayOS.close();
+            log.info("已经关闭执行byteArrayOS返回的stream！");
+
+            if (exitValue != 0) {
+                log.error("命令未执行完成就推出了程序！ exit value={}", exitValue);
+            } else {
+                log.info("命令执行完成！ exit value={}", exitValue);
+            }
+            System.exit(0);
+        } catch (Exception e) {
+            log.error("命令执行过程报错，error=", e);
+            log.error("即将获取报错byteArrayOS返回的stream！");
+            String retStr = byteArrayOS.toString().trim();
+            log.info("报错byteArrayOS返回的stream：\n{}", retStr);
             try {
-                int exitValue = executor.execute(cmd);
-
-                String retStr = byteArrayOS.toString().trim();
-                log.info("获取到执行SparkSubmitter返回的stream: {}", retStr);
                 byteArrayOS.close();
-                log.info("已经关闭执行SparkSubmitter返回的stream！");
-
-                if (exitValue != 0) {
-                    log.info("命令未执行完成就推出了程序！ exit value={}", exitValue);
-                } else {
-                    log.info("命令执行完成！ exit value={}", exitValue);
-                }
-                System.exit(0);
-            } catch (Exception e) {
-                log.error("命令执行过程报错，错误不向外抛出，error=", e);
-                String retStr = byteArrayOS.toString().trim();
-                log.info("报错SparkSubmitter返回的stream：{}", retStr);
-                byteArrayOS.close();
-                log.info("已经关闭报错SparkSubmitter返回的stream！");
+            } catch (IOException ioException) {
+                log.error("关闭报错byteArrayOS过程异常，e=", ioException);
                 System.exit(-1);
             }
-        } catch (Exception e) {
-            log.error("命令准备过程报错，错误不向外抛出，error=", e);
+            log.error("正常关闭报错byteArrayOS返回的stream！");
             System.exit(-1);
         }
 
