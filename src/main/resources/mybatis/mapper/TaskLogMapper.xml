@@ -83,11 +83,11 @@
             <if test="endTime != null">
                 end_time = #{endTime},
             </if>
-            <if test="status != null">
-                status = #{status},
-            </if>
             <if test="errorLog != null and errorLog != ''">
-                error_log = #{errorLog}
+                error_log = #{errorLog},
+            </if>
+            <if test="status != null">
+                status = #{status}
             </if>
     </sql>
 
