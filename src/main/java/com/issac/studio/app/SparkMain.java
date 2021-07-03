@@ -184,27 +184,31 @@ public class SparkMain {
     private static SparkSession buildSparkSession(Task task){
         log.info("开始build sparkSession！");
 
-        String appName = "sqlBase-" + task.getTaskKey() + "-" + startTime.getTime();
+        String appName = "DATA_HUB-" + task.getTaskKey() + "-" + startTime.getTime();
         JSONObject jsonObject = JSONObject.parseObject(task.getSparkConfig());
-        String master = jsonObject.getString("master");
+        String localMaster = jsonObject.getString("spark.master");
 
-        SparkConf sparkConf = new SparkConf();
-        if(master.startsWith("local")){
-            for(Map.Entry<String, Object> entry : jsonObject.entrySet()){
-                sparkConf.set(entry.getKey(), String.valueOf(entry.getValue()));
-            }
-        }
+        SparkSession sparkSession;
 
         SparkSession.Builder builder = SparkSession
                 .builder()
                 .appName(appName);
 
-        if (task.getHiveSupport() == 1) {
-            log.info("过程需要使用hive，打开enableHiveSupport！");
-            builder = builder.enableHiveSupport();
+        SparkConf sparkConf = new SparkConf();
+        if(localMaster != null){
+            // 表示local模式运行
+            for(Map.Entry<String, Object> entry : jsonObject.entrySet()){
+                sparkConf.set(entry.getKey(), String.valueOf(entry.getValue()));
+            }
+            sparkSession = builder.config(sparkConf).config("spark.port.maxRetries",10000).getOrCreate();
+        } else{
+            // 表示集群模式运行，因为在spark_submit的时候已经传递了参数，所以这里不再传递conf参数
+            if (task.getHiveSupport() == 1) {
+                log.info("过程需要使用hive，打开enableHiveSupport！");
+                builder = builder.enableHiveSupport();
+            }
+            sparkSession = builder.getOrCreate();
         }
-
-        SparkSession sparkSession = builder.config(sparkConf).getOrCreate();
 
         log.info("SparkSession的配置如下：{}", JSONObject.toJSONString(sparkSession.sessionState().conf().settings()));
         return sparkSession;
@@ -253,7 +257,7 @@ public class SparkMain {
      */
     private static void sink(Dataset<Row> ds, List<Sink> sinks, ExternalParam eParam) throws Exception {
         for (Sink item : sinks) {
-            Class<?> configClass = Class.forName(item.getSinkType());
+            Class<?> configClass = Class.forName(item.getSinkConfigType());
             AbstractSinkConfig writerConfig = (AbstractSinkConfig) JSONObject.parseObject(item.getSinkConfigJson(), configClass);
             item.setSinkConfigEntity(writerConfig);
 
