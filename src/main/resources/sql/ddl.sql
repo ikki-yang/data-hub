@@ -72,3 +72,14 @@ CREATE TABLE `task_log` (
     , PRIMARY KEY (`id`)
     , unique key `id_unique` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='任务表运行日志表';
+
+CREATE TABLE `test_student` (
+    `id`                      bigint(20)      NOT NULL    AUTO_INCREMENT  COMMENT '主键'
+    , `student_id`            varchar(50)     NOT NULL                    COMMENT '学生编号'
+    , `student_name`          datetime        NOT NULL                    COMMENT '学生姓名'
+    , `created`               datetime        DEFAULT CURRENT_TIMESTAMP                    COMMENT '创建日期'
+    , `modified`              datetime        DEFAULT CURRENT_TIMESTAMP                    COMMENT '修改时间'
+    , `yn`                    int(2)          DEFAULT 1                   COMMENT '是否有效'
+    , PRIMARY KEY (`id`)
+    , unique key `id_unique` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用于测试程序使用的表';
