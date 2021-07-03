@@ -36,10 +36,10 @@ public class SparkSubmitter {
         String sparkConfig = task.getSparkConfig();
 
         JSONObject configJson = JSONObject.parseObject(sparkConfig);
-        String master = configJson.getString("master");
+        String master = configJson.getString("spark.master");
 
         StringBuilder commandToExec = new StringBuilder();
-        if (master.startsWith("local")) {
+        if (master != null) {
             commandToExec.append("java -cp ")
                     .append(jarPath)
                     .append(" ")
