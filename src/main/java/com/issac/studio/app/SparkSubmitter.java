@@ -5,6 +5,7 @@ import com.issac.studio.app.entity.domain.Task;
 import com.issac.studio.app.entity.mapper.TaskMapper;
 import com.issac.studio.app.exception.NotFoundException;
 import com.issac.studio.app.persistent.Persistent;
+import com.issac.studio.app.util.OSInfo;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -83,8 +85,17 @@ public class SparkSubmitter {
         } catch (Exception e) {
             log.error("命令执行过程报错，error=", e);
             log.error("即将获取报错byteArrayOS返回的stream！");
-            String retStr = byteArrayOS.toString().trim();
-            log.info("报错byteArrayOS返回的stream：\n{}", retStr);
+            String retStr = null;
+            try {
+                if(OSInfo.isWindows()){
+                    retStr = new String(byteArrayOS.toByteArray(), "GBK");
+                }else {
+                    retStr = new String(byteArrayOS.toByteArray(), "UTF-8");
+                }
+            } catch (UnsupportedEncodingException unsupportedEncodingException) {
+                log.error("报错byteArrayOS返回的stream编码错误，error=", unsupportedEncodingException);
+            }
+            log.error("报错byteArrayOS返回的stream：\n{}", retStr);
             try {
                 byteArrayOS.close();
             } catch (IOException ioException) {
