@@ -4,6 +4,8 @@ import com.issac.studio.app.entity.dto.ExternalParam;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
+import java.io.Serializable;
+
 /**
  * @description: 抽象写数据类
  * @file: Sink
@@ -12,7 +14,7 @@ import org.apache.spark.sql.Row;
  * @since: v1.0.0
  * @copyright (C), 1992-2020, issac
  */
-public abstract class Sink {
+public abstract class Sink implements Serializable {
     /**
      * 根据sink里面的内容将数据写到相应的目的地
      * @param ds : ds

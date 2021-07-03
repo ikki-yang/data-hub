@@ -5,6 +5,8 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
+import java.io.Serializable;
+
 /**
  * @description: 抽象数据源类
  * @file: Source
@@ -13,7 +15,7 @@ import org.apache.spark.sql.SparkSession;
  * @since: v1.0.0
  * @copyright (C), 1992-2020, issac
  */
-public abstract class Source {
+public abstract class Source implements Serializable {
 
     public void handleSource(SparkSession session, com.issac.studio.app.entity.domain.Source source, ExternalParam eParam) throws Exception {
             Dataset<Row> ds = buildDataset(session, source, eParam);
