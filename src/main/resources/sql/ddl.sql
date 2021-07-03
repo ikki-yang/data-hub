@@ -48,7 +48,7 @@ CREATE TABLE `sink` (
 CREATE TABLE `handle` (
     `id`                      bigint(20)      NOT NULL    AUTO_INCREMENT  COMMENT '主键'
     , `task_id`               bigint(20)      NOT NULL                    COMMENT '任务id'
-    , `executeType`           int(2)          NOT NULL                    COMMENT 'handle执行类型 1：前置；2：后置；3：异常'
+    , `execute_type`          int(2)          NOT NULL                    COMMENT 'handle执行类型 1：前置；2：后置；3：异常'
     , `handle_type`           varchar(200)    DEFAULT NULL                COMMENT 'handle的全限定名'
     , `handle_config_type`    varchar(200)    DEFAULT NULL                COMMENT 'handle的config类的全限定名'
     , `handle_config_json`    text            DEFAULT NULL                COMMENT 'handle的配置，以json格式保存'

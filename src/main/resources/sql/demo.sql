@@ -3,8 +3,8 @@ INSERT INTO data_hub.task (id, task_key, task_name, jar_path, transform_sql, hiv
 	, student_name as `cf:student_name`
 	, student_greade as `cf:student_grade`
 from
-	my_temp_view', 1, '{"master":"yarn", "executor-cores":2, "driver-memory":"1g"}', 1, '2021-07-02 08:50:31', '2021-07-02 08:50:37', 1);
-INSERT INTO data_hub.task (id, task_key, task_name, jar_path, transform_sql, hive_support, spark_config, latch, created, modified, yn) VALUES (2, 'file2jdbc_local', '本地模式从jdbc导数据到hive中', '/target/data-hub.jar', 'select * from my_temp_view', 1, '{"master":"local[2]", "spark.executor.cores":2, "spark.driver.memory":"1g"}', 1, '2021-07-02 08:50:31', '2021-07-02 08:50:37', 1);
+	my_temp_view', 0, '{"master":"yarn", "executor-cores":2, "driver-memory":"1g"}', 1, '2021-07-02 08:50:31', '2021-07-02 08:50:37', 1);
+INSERT INTO data_hub.task (id, task_key, task_name, jar_path, transform_sql, hive_support, spark_config, latch, created, modified, yn) VALUES (2, 'file2jdbc_local', '本地模式从jdbc导数据到hive中', '/target/data-hub.jar', 'select * from my_temp_view', 0, '{"spark.master":"local[2]", "spark.executor.cores":2, "spark.driver.memory":"1g"}', 1, '2021-07-02 08:50:31', '2021-07-02 08:50:37', 1);
 
 
 
