@@ -75,8 +75,9 @@ CREATE TABLE `task_log` (
 
 CREATE TABLE `test_student` (
     `id`                      bigint(20)      NOT NULL    AUTO_INCREMENT  COMMENT '主键'
-    , `student_id`            varchar(50)     NOT NULL                    COMMENT '学生编号'
-    , `student_name`          datetime        NOT NULL                    COMMENT '学生姓名'
+    , `student_id`            bigint(20)      NOT NULL                    COMMENT '学生编号'
+    , `student_name`          varchar(20)     NOT NULL                    COMMENT '学生姓名'
+    , `student_grade`         varchar(10)     NOT NULL                    COMMENT '学生姓名'
     , `created`               datetime        DEFAULT CURRENT_TIMESTAMP                    COMMENT '创建日期'
     , `modified`              datetime        DEFAULT CURRENT_TIMESTAMP                    COMMENT '修改时间'
     , `yn`                    int(2)          DEFAULT 1                   COMMENT '是否有效'
