@@ -39,6 +39,9 @@ public class Handle extends AbstractDomain {
      */
     private AbstractHandleConfig handleConfigEntity;
 
+    public Handle() {
+    }
+
     public Handle(Long taskId, Integer executeType) {
         this.taskId = taskId;
         this.executeType = executeType;

@@ -25,6 +25,9 @@ public class Source extends AbstractDomain {
     private String sourceConfigJson;
     private AbstractSourceConfig sourceConfigEntity;
 
+    public Source() {
+    }
+
     public Source(Long taskId) {
         this.taskId = taskId;
     }

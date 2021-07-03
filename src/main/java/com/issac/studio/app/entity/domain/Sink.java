@@ -17,6 +17,9 @@ public class Sink extends AbstractDomain {
     private String sinkConfigJson;
     private AbstractSinkConfig sinkConfigEntity;
 
+    public Sink() {
+    }
+
     public Sink(Long taskId) {
         this.taskId = taskId;
     }
