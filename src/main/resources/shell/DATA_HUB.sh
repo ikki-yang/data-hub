@@ -7,4 +7,4 @@ export LD_LIBRARY_PATH=$HADOOP_HOME/lib/native
 task_key=$1
 date=$2
 
-java -cp /home/xxuser/xxx/data-hub.jar --class com.issac.studio.app.Application ${task_key} ${date}
+java -cp /home/xxuser/xxx/data-hub.jar --class com.issac.studio.app.SparkSubmitter ${task_key} ${date}

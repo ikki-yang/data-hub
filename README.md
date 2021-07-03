@@ -23,7 +23,7 @@ data-hub的使用非常简单，有多简单呢？你只需要： 在执行之�
 ```shell script
 mvn clean package -D maven.test.skip=true -P prod
 ```
-3、将jar包、DATA_HUB.sh、DATA_HUB_LOCAL.sh(这个可以不放到driver上)放到大数据driver机器的 /home/xxuser/xxx/ 目录下
+3、将jar包、DATA_HUB.sh服务器的 /home/xxuser/xxx/ 目录下，如果是集群模式则需要放到spark的driver机器上
 
 4、执行以下命令
 ``` shell script
