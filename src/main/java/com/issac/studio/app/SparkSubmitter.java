@@ -40,7 +40,7 @@ public class SparkSubmitter {
 
         StringBuilder commandToExec = new StringBuilder();
         if (master != null) {
-            commandToExec.append("java -cp ")
+            commandToExec.append("java -Dfile.encoding=UTF-8 -cp ")
                     .append(jarPath)
                     .append(" ")
                     .append("com.issac.studio.app.SparkMain ");
@@ -66,44 +66,12 @@ public class SparkSubmitter {
         log.info("即将执行的cmd命令：{}", commandToExec);
         CommandLine cmd = CommandLine.parse(commandToExec.toString());
         DefaultExecutor executor = new DefaultExecutor();
-        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-        executor.setStreamHandler(new PumpStreamHandler(byteArrayOS, byteArrayOS));
         try {
             int exitValue = executor.execute(cmd);
-
-            String retStr = byteArrayOS.toString().trim();
-            log.info("获取到执行SparkSubmitter返回的stream: {}", retStr);
-            byteArrayOS.close();
-            log.info("已经关闭执行byteArrayOS返回的stream！");
-
-            if (exitValue != 0) {
-                log.error("命令未执行完成就推出了程序！ exit value={}", exitValue);
-            } else {
-                log.info("命令执行完成！ exit value={}", exitValue);
-            }
+            log.info("命令执行完成！ exit value={}", exitValue);
             System.exit(0);
         } catch (Exception e) {
             log.error("命令执行过程报错，error=", e);
-            log.error("即将获取报错byteArrayOS返回的stream！");
-            String retStr = null;
-            try {
-                if(OSInfo.isWindows()){
-                    retStr = new String(byteArrayOS.toByteArray(), "GBK");
-                }else {
-                    retStr = new String(byteArrayOS.toByteArray(), "UTF-8");
-                }
-            } catch (UnsupportedEncodingException unsupportedEncodingException) {
-                log.error("报错byteArrayOS返回的stream编码错误，error=", unsupportedEncodingException);
-            }
-            log.error("报错byteArrayOS返回的stream：\n{}", retStr);
-            try {
-                byteArrayOS.close();
-            } catch (IOException ioException) {
-                log.error("关闭报错byteArrayOS过程异常，e=", ioException);
-                log.info("命令执行异常！ exit value={}", -1);
-                System.exit(-1);
-            }
-            log.error("正常关闭报错byteArrayOS返回的stream！");
             log.info("命令执行异常！ exit value={}", -1);
             System.exit(-1);
         }
