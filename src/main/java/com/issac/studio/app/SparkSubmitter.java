@@ -100,9 +100,11 @@ public class SparkSubmitter {
                 byteArrayOS.close();
             } catch (IOException ioException) {
                 log.error("关闭报错byteArrayOS过程异常，e=", ioException);
+                log.info("命令执行异常！ exit value={}", -1);
                 System.exit(-1);
             }
             log.error("正常关闭报错byteArrayOS返回的stream！");
+            log.info("命令执行异常！ exit value={}", -1);
             System.exit(-1);
         }
 
