@@ -5,7 +5,7 @@ CREATE TABLE `task` (
     `id`                      bigint(20)      NOT NULL    AUTO_INCREMENT  COMMENT '主键'
     , `task_key`              varchar(50)     NOT NULL                    COMMENT '任务编号'
     , `task_name`             varchar(50)     NOT NULL                    COMMENT '任务编号'
-    , `jar_path`              varchar(500)    NOT NULL                    COMMENT '运行的fatjar所在全路径'
+    , `jar_path`              text            NOT NULL                    COMMENT '运行的fatjar所在全路径'
     , `transform_sql`         text            DEFAULT NULL                COMMENT 'etl的sql'
     , `hive_support`          int(2)          DEFAULT NULL                COMMENT '是否需要读取或者写hive表 1：需要；2：不需要'
     , `spark_config`          text            DEFAULT NULL                COMMENT 'sparky运行参数配置'
