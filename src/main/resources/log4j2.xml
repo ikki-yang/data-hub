@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration status="warn" monitorInterval="5">
-    <properties>
-        <property name="LOG_HOME">E:/logs</property>
-    </properties>
+<!--    <properties>-->
+<!--        <property name="LOG_HOME">E:/logs</property>-->
+<!--    </properties>-->
 
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
